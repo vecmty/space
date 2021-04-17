@@ -12,8 +12,9 @@ import GameplayKit
 class GameViewController: UIViewController {
     
     var gameScene: GameScene!
-//    var pauseViewController: PauseViewController!
-    var pauseViewController: UIViewController!
+    var pauseViewController: PauseViewController!
+    //    var pauseViewController: UIViewController!
+    
     
     
     
@@ -22,9 +23,9 @@ class GameViewController: UIViewController {
         
         
         pauseViewController = storyboard?.instantiateViewController(withIdentifier: "PauseViewController")
-//                                as! PauseViewController)
-
-//        pauseViewController.delegate = self
+            as? PauseViewController
+        
+        pauseViewController.delegate = self
         
         
         
@@ -62,23 +63,25 @@ class GameViewController: UIViewController {
         return true
     }
     
-    func showVC(_ viewController: UIViewController) {
+    //    func showVC(_ viewController: UIViewController) {
+    func showVC(_ viewController: PauseViewController) {
         addChild(viewController)
         view.addSubview(viewController.view)
         viewController.view.frame = view.bounds
     }
-//
-//    func hideScreen(viewController: PauseViewController) {
-//        viewController.willMove(toParent: nil)
-//        viewController.removeFromParent()
-//        viewController.view.removeFromSuperview()
-//    }
+    
+    
+    func hideScreen(viewController: PauseViewController) {
+        viewController.willMove(toParent: nil)
+        viewController.removeFromParent()
+        viewController.view.removeFromSuperview()
+    }
     
     @IBAction func pauseButton(_ sender: UIButton) {
         gameScene.pauseButton(sender: sender)
         showVC(pauseViewController)
         
-//        present(pauseViewController, animated: true, completion: nil)
+        //        present(pauseViewController, animated: true, completion: nil)
     }
     
     
@@ -86,10 +89,11 @@ class GameViewController: UIViewController {
 }
 
 
-//extension GameViewController: PauseVCDelegate {
-//    func pauseVCPlayButton(_ viewController: PauseViewController) {
-//        hideScreen(viewController: pauseViewController)
-//    }
-    
-    
+extension GameViewController: PauseVCDelegate {
+    func pauseViewControllerPlayButton(_ viewController: PauseViewController) {
+        hideScreen(viewController: pauseViewController)
+        
+    }
+}
+
 

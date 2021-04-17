@@ -25,8 +25,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var spaceShipLayer: SKNode!
     
     
-    
-    
     var gameIsPaused: Bool = false
     
     func pauseButton(sender: AnyObject) {
@@ -145,6 +143,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         scoreLabel.zPosition = 3
     }
+    
+    
+    
+    
+    
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         
