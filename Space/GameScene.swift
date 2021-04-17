@@ -7,6 +7,7 @@
 
 import SpriteKit
 import GameplayKit
+import AVFoundation
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
@@ -23,29 +24,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var asteroidLayer: SKNode!
     var starsLayer: SKNode!
     var spaceShipLayer: SKNode!
+    var musicPlayer: AVAudioPlayer!
+    
     
     
     var gameIsPaused: Bool = false
     
-    func pauseButton(sender: AnyObject) {
-        if !gameIsPaused {
-            pauseTheGame()
-        } else {
-            unpauseTheGame()
-        }
-    }
+//    func pauseButton(sender: AnyObject) {
+//        if !gameIsPaused {
+//            pauseTheGame()
+//        } else {
+//            unpauseTheGame()
+//        }
+//    }
     
     func pauseTheGame() {
-        gameIsPaused = true
-        self.asteroidLayer.isPaused = true
         physicsWorld.speed = 0
+        self.asteroidLayer.isPaused = true
         starsLayer.isPaused = true
+        spaceShipLayer.isPaused = true
+        gameIsPaused = true
+        
+    
+        musicPlayer.pause()
     }
     func unpauseTheGame() {
         gameIsPaused = false
         self.asteroidLayer.isPaused = false
         physicsWorld.speed = 1
         starsLayer.isPaused = false
+        spaceShipLayer.isPaused = false
+        
+        musicPlayer.play()
     }
     
     func resetTheGame() {
@@ -142,11 +152,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(scoreLabel)
         
         scoreLabel.zPosition = 3
+        
+        
+        playMusic()
     }
     
     
     
-    
+    func playMusic() {
+        if let musicPath = Bundle.main.url(forResource: "music", withExtension: "mp3") {
+            musicPlayer = try! AVAudioPlayer(contentsOf: musicPath, fileTypeHint: nil)
+            musicPlayer.play()
+            musicPlayer.numberOfLoops = -1
+            musicPlayer.volume = 0.7
+        }
+    }
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -235,6 +255,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             self.score = 0
             self.scoreLabel.text = "Score: \(score)"
         }
+        
+        
+        let hitSoundAction = SKAction.playSoundFileNamed("knock1", waitForCompletion: true)
+        run(hitSoundAction)
     }
     
     func didEnd(_ contact: SKPhysicsContact) {
